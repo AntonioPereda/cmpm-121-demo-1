@@ -11,4 +11,10 @@ app.append(header);
 
 const button = document.createElement("button");
 button.innerHTML = "🔥";
+
+let clicks = 0;
+button.onclick = () => {
+    clicks++;
+    button.innerHTML = `(${clicks}) Clicks`;
+};
 app.append(button);
