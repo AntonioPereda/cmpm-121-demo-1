@@ -2,5 +2,4 @@ This is the starter code project for the `Demo 1` project in CMPM 121, Game Desi
 
 ####CHANGELOG####
 
-- Added new vars "delay" & "amount"
-- clicks now increase every second
+- STEP 4 WIP

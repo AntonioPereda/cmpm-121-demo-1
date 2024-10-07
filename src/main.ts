@@ -18,9 +18,22 @@ button.onclick = () => {
   button.innerHTML = `(${clicks}) Clicks`;
 };
 app.append(button);
-
+/*
 let delay = 1000;
-let amount = 1;
-let addCount = setInterval(cGrowth, delay);
+setInterval(cGrowth, delay);
+*/
 
-function cGrowth(): any{clicks = clicks + amount};
+let lastTick = 0;
+let amount = 1;
+function incrementCount(FR): void {
+
+  const dFR = (FR - lastTick)/1000;
+  lastTick = FR;
+
+  amount = amount * dFR;
+  clicks = clicks + amount;
+  requestAnimationFrame(incrementCount);
+}
+
+incrementCount(0);
+console.log(amount);
