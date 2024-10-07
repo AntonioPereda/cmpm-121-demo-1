@@ -23,11 +23,11 @@ let delay = 1000;
 setInterval(cGrowth, delay);
 */
 
+/*
 let lastTick = 0;
 let amount = 1;
-function incrementCount(FR): void {
-
-  const dFR = (FR - lastTick)/1000;
+function incrementCount(FR: int): void {
+  const dFR = (FR - lastTick) / 1000;
   lastTick = FR;
 
   amount = amount * dFR;
@@ -37,3 +37,4 @@ function incrementCount(FR): void {
 
 incrementCount(0);
 console.log(amount);
+*/
