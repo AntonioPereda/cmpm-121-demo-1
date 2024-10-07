@@ -2,6 +2,5 @@ This is the starter code project for the `Demo 1` project in CMPM 121, Game Desi
 
 ####CHANGELOG####
 
-- Now tracks the number of times the button is clicked
-- Button now displays clicks after each click
-- WHY IS MY RIOT GAMES CLIENT TAKING AN EXTRA 50GB OF STORAGE????
+- Added new vars "delay" & "amount"
+- clicks now increase every second

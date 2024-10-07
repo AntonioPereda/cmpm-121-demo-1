@@ -18,3 +18,9 @@ button.onclick = () => {
   button.innerHTML = `(${clicks}) Clicks`;
 };
 app.append(button);
+
+let delay = 1000;
+let amount = 1;
+let addCount = setInterval(cGrowth, delay);
+
+function cGrowth(): any{clicks = clicks + amount};
