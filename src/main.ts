@@ -13,28 +13,26 @@ const button = document.createElement("button");
 button.innerHTML = "🔥";
 
 let clicks = 0;
+const cookieIncrease = 1;
 button.onclick = () => {
   clicks++;
-  button.innerHTML = `(${clicks}) Clicks`;
+  button.innerHTML = `(${clicks | 0}) Clicks`;
+  //requestAnimationFrame(incrementCount);
 };
 app.append(button);
-/*
-let delay = 1000;
-setInterval(cGrowth, delay);
-*/
 
-/*
+
 let lastTick = 0;
-let amount = 1;
-function incrementCount(FR: int): void {
+let amount = cookieIncrease;
+function incrementCount(FR: number): void {
   const dFR = (FR - lastTick) / 1000;
   lastTick = FR;
 
-  amount = amount * dFR;
+  amount = cookieIncrease * dFR;
   clicks = clicks + amount;
   requestAnimationFrame(incrementCount);
 }
 
-incrementCount(0);
-console.log(amount);
-*/
+requestAnimationFrame(incrementCount);
+
+
