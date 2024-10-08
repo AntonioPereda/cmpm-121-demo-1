@@ -2,7 +2,14 @@ This is the starter code project for the `Demo 1` project in CMPM 121, Game Desi
 
 ####CHANGELOG####
 
-- !!STEP 4 WIP COMPLETE!!
-- Replaced stepInterval w/ requestAnimationFrame to have constant click growth set with device framerate
-    - The amount a cookie increases per second is now contained within a variable
-- Total number of clicks displayed on the button now display remains the same, but behind the scenes is a trunkated floating point number
+- !!STEP 5 COMPLETE!!
+- Added helpful comments in main.ts
+- Renamed incrimentCount to globalUpdate
+- Renamed the main button "button" to "theGameButton"
+- Number of clicks now auto-update within globalUpdate
+
+- Implimented AutoClick Upgrades
+    - AutoClick rate changed from 1 to 0 / sec
+    - Added AutoClick upgrade button that costs 10 clicks
+        - AutoClick upgrade is disabled otherwise
+        - AutoClick rate increases by 1 with each upgrade
