@@ -2,13 +2,7 @@ This is the starter code project for the `Demo 1` project in CMPM 121, Game Desi
 
 ####CHANGELOG####
 
-- !!STEP 6 COMPLETE!!
-- Added Clicks / sec counter
-- Added seperate Total Clicks counter
-- AutoClick Updates
-    - AutoClick is now seperated into 3 categories
-        - 0.1 Clicks Per Second costing 10 Clicks
-        - 2 Clicks Per Second costing 100 Clicks
-        - 50 Clicks Per Second costing 1000 Clicks
-    - Each individual AutoClick upgrade displays how many you posses and their growth rate
-- Fixed a typo that was consitently in the README
+- !!STEP 7 COMPLETE!!
+- Adjusted AutoClick Upgrades, focused on Upgrade Costs
+  - Each upgrade costs is now specified on the lefthand side
+  - After each upgrade, the cost for the particular upgrade increases by X1.15

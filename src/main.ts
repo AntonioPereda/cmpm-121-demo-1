@@ -16,7 +16,7 @@ theGameButton.innerHTML = "CLICK MEEEHHHH";
 theGameButton.style.position = "absolute";
 theGameButton.style.left = "550px";
 
-let clicks = 0;
+let clicks = 2000;
 let clickIncrease = 0;
 theGameButton.onclick = () => {
   //INCREASE CLICKS ON BUTTON CLICK
@@ -26,20 +26,21 @@ app.append(theGameButton);
 
 //AUTOCLICK UPGRADE LEVELS
 
-
 //LEVEL A//
 
-
-let upgradeLevels = [0,0,0];
+const upgradeLevels = [0, 0, 0];
+const upgradeCosts = [10, 100, 1000];
 
 const autoclickUpgradeA = document.createElement("button");
-autoclickUpgradeA.innerHTML = "Enable 0.1 Autoclick Per Second";
+autoclickUpgradeA.innerHTML = `(${upgradeCosts[0] | 0}) | Enable 0.1 Autoclick Per Second`;
 
 autoclickUpgradeA.onclick = () => {
-  clickIncrease+=0.1;
+  clickIncrease += 0.1;
   clicks -= 10;
   upgradeLevels[0]++;
-  autoclickUpgradeA.innerHTML = `(${upgradeLevels[0]}) 1/10th Click Per Second; Click To Upgrade`;
+  upgradeCosts[0]*=1.15;
+  autoclickUpgradeA.innerHTML = `(${upgradeCosts[0] | 0}) | (${upgradeLevels[0]}) 1/10th Click Per Second; Click To Upgrade`;
+  console.log(upgradeCosts);
 };
 
 autoclickUpgradeA.style.position = "absolute";
@@ -49,13 +50,14 @@ app.append(autoclickUpgradeA);
 
 //LEVEL B//
 const autoclickUpgradeB = document.createElement("button");
-autoclickUpgradeB.innerHTML = "Enable 2 Autoclick Per Second";
+autoclickUpgradeB.innerHTML = `(${upgradeCosts[1] | 0}) | Enable 2 Autoclick Per Second`;
 
 autoclickUpgradeB.onclick = () => {
-  clickIncrease+=2;
+  clickIncrease += 2;
   clicks -= 100;
   upgradeLevels[1]++;
-  autoclickUpgradeB.innerHTML = `(${upgradeLevels[1]}) Double Clicks Per Second; Click To Upgrade`;
+  upgradeCosts[1]*=1.15;
+  autoclickUpgradeB.innerHTML = `(${upgradeCosts[1] | 0}) |(${upgradeLevels[1]}) Double Clicks Per Second; Click To Upgrade`;
 };
 
 autoclickUpgradeB.style.position = "absolute";
@@ -65,13 +67,14 @@ app.append(autoclickUpgradeB);
 
 //LEVEL C//
 const autoclickUpgradeC = document.createElement("button");
-autoclickUpgradeC.innerHTML = "Enable 50 Autoclick Per Second";
+autoclickUpgradeC.innerHTML = `(${upgradeCosts[2] | 0}) | Enable 50 Autoclick Per Second`;
 
 autoclickUpgradeC.onclick = () => {
-  clickIncrease+=50;
+  clickIncrease += 50;
   clicks -= 1000;
   upgradeLevels[2]++;
-  autoclickUpgradeC.innerHTML = `(${upgradeLevels[2]}) Triple Clicks Per Second; Click To Upgrade`;
+  upgradeCosts[2]*=1.15;
+  autoclickUpgradeC.innerHTML = `(${upgradeCosts[2] | 0}) 50 Clicks Per Second; Click To Upgrade`;
 };
 
 autoclickUpgradeC.style.position = "absolute";
@@ -79,14 +82,15 @@ autoclickUpgradeC.style.left = "20px";
 autoclickUpgradeC.style.top = "150px";
 app.append(autoclickUpgradeC);
 
-//DISPLAY CLICKS
-//🔥
+
+
+//DISPLAY CLICKS 🗣️🗣️🗣️🔥🔥🔥
 const displayClicks = document.createElement("p");
 displayClicks.style.position = "absolute";
 displayClicks.innerHTML = "im shocked if you manage to see this in-game";
 displayClicks.style.left = "970px";
 displayClicks.style.top = "50px";
-displayClicks.style.fontSize = "40px"
+displayClicks.style.fontSize = "40px";
 app.append(displayClicks);
 
 //CPS
@@ -95,10 +99,8 @@ CPS.style.position = "absolute";
 CPS.innerHTML = "im shocked if you manage to see this in-game";
 CPS.style.left = "975px";
 CPS.style.top = "130px";
-CPS.style.fontSize = "15px"
+CPS.style.fontSize = "15px";
 app.append(CPS);
-
-
 
 //GLOBAL UPDATE
 let lastTick = 0;
@@ -107,19 +109,31 @@ function globalUpdate(FR: number): void {
   const dFR = (FR - lastTick) / 1000; //FRAMERATE CALC
   lastTick = FR;
 
-  amount = clickIncrease * dFR;//AUTOCLICK FUNCT
+  amount = clickIncrease * dFR; //AUTOCLICK FUNCT
   clicks = clicks + amount;
 
-  displayClicks.innerHTML = `(${clicks | 0}) Clicks`; 
-  CPS.innerHTML = `(${((0.1 * upgradeLevels[0]) + (2 * upgradeLevels[1]) + (50 * upgradeLevels[2])) }) Clicks / Second`; 
+  displayClicks.innerHTML = `(${clicks | 0}) Clicks`;
+  CPS.innerHTML = `(${0.1 * upgradeLevels[0] + 2 * upgradeLevels[1] + 50 * upgradeLevels[2]}) Clicks / Second`;
 
   //IF AUTOCLICK UPGRADE
   //IS AVAILABLE
-  if (clicks < 10) {autoclickUpgradeA.disabled = true;} else {autoclickUpgradeA.disabled = false;}
+  if (clicks < upgradeCosts[0]) {
+    autoclickUpgradeA.disabled = true;
+  } else {
+    autoclickUpgradeA.disabled = false;
+  }
 
-  if (clicks < 100) {autoclickUpgradeB.disabled = true;} else {autoclickUpgradeB.disabled = false;}
+  if (clicks < upgradeCosts[1]) {
+    autoclickUpgradeB.disabled = true;
+  } else {
+    autoclickUpgradeB.disabled = false;
+  }
 
-  if (clicks < 1000) {autoclickUpgradeC.disabled = true;} else {autoclickUpgradeC.disabled = false;}
+  if (clicks < upgradeCosts[2]) {
+    autoclickUpgradeC.disabled = true;
+  } else {
+    autoclickUpgradeC.disabled = false;
+  }
 
   requestAnimationFrame(globalUpdate);
 }
