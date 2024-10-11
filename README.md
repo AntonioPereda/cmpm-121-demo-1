@@ -2,7 +2,10 @@ This is the starter code project for the `Demo 1` project in CMPM 121, Game Desi
 
 ####CHANGELOG####
 
-- !!STEP 7 COMPLETE!!
-- Adjusted AutoClick Upgrades, focused on Upgrade Costs
-  - Each upgrade costs is now specified on the lefthand side
-  - After each upgrade, the cost for the particular upgrade increases by X1.15
+- !!STEP 8 COMPLETE!!
+- LOOOOORE
+    - You are a tiny flame, flickering lightly. Keep yourself active and burn brighter than ever before!
+    - Your currency is Ashes (no longer noted as "clicks" in UI)
+- Upgrade Buttons
+    - Simplified so theyre easier to read and understand
+    - Buttons now show a description when hovering over them
