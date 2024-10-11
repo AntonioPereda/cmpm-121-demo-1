@@ -21,7 +21,7 @@ theGameButton.style.fontSize = "140px";
 theGameButton.style.background = "green";
 theGameButton.style.border = "black";
 
-let clicks = 100000;
+let clicks = 0;
 let clickIncrease = 0;
 let multiplier = 1;
 theGameButton.onclick = () => {
@@ -30,10 +30,7 @@ theGameButton.onclick = () => {
 };
 app.append(theGameButton);
 
-//AUTOCLICK UPGRADE LEVELS
-
-const upgradeLevels = [0, 0, 0];
-
+//MAKING ITEMSHOP
 interface Item {
   name: string;
   cost: number;
@@ -58,7 +55,7 @@ const itemShop: Item[] = [
     hoverLeft: "290px",
     hoverTop: "32px",
     desc: "A cozy firepit, great for some camping.<br>Gain an additional 0.1 Ashes Per Second.",
-    lvl: 0
+    lvl: 0,
   },
   {
     name: "Charcoal",
@@ -70,7 +67,7 @@ const itemShop: Item[] = [
     hoverLeft: "300px",
     hoverTop: "80px",
     desc: "Quality Charcoal to fuel the fire.<br>Gain an additional 2 Ashes Per Second.",
-    lvl: 0
+    lvl: 0,
   },
   {
     name: "Lighter Fluid",
@@ -82,7 +79,7 @@ const itemShop: Item[] = [
     hoverLeft: "335px",
     hoverTop: "130px",
     desc: "Please dont set things on fire that shouldn't...<br>Gain an additional 50 Ashes Per Second.",
-    lvl: 0
+    lvl: 0,
   },
   {
     name: "Flamethrower",
@@ -94,7 +91,7 @@ const itemShop: Item[] = [
     hoverLeft: "355px",
     hoverTop: "180px",
     desc: "Does this even have a practical everyday use?<br>Ashes Per Second Increases by 4%.",
-    lvl: 0
+    lvl: 0,
   },
   {
     name: "Smokey The Bear",
@@ -106,20 +103,19 @@ const itemShop: Item[] = [
     hoverLeft: "40px",
     hoverTop: "280px",
     desc: "WHAT ARE YOU DOING?????<br>Ashes Per Second Increases by 75%",
-    lvl: 0
-  }
-  
+    lvl: 0,
+  },
 ];
 
 //!!!CREATING BUTTONS VIA DDD!!!//
 const listOfButtons: HTMLButtonElement[] = [];
-for (let a = 0; a <= itemShop.length-1; a++) {
+for (let a = 0; a <= itemShop.length - 1; a++) {
   console.log(a);
   const button = document.createElement("button");
   if (itemShop[a].lvl == 0) {
     if (a == 2 || a == 1) {
       button.innerHTML = `Get ${itemShop[a].name} For: ${itemShop[a].cost | 0}  Ashes`;
-    } else if (a == 4){
+    } else if (a == 4) {
       button.innerHTML = `Hold ${itemShop[a].name} Hostage For: ${itemShop[a].cost | 0}  Ashes`;
     } else {
       console.log(itemShop[a].name);
@@ -199,21 +195,22 @@ function globalUpdate(FR: number): void {
   const dFR = (FR - lastTick) / 1000; //FRAMERATE CALC
   lastTick = FR;
 
-  amount = (clickIncrease*multiplier) * dFR; //AUTOCLICK FUNCT
+  amount = clickIncrease * multiplier * dFR; //AUTOCLICK FUNCT
   clicks = clicks + amount;
 
   displayClicks.innerHTML = `(${clicks | 0}) Ashes`;
 
   let totalCPS = 0;
 
-  for (let c = 0; c<itemShop.length; c++){
-    totalCPS += itemShop[c].lvl * itemShop[c].rate
+  for (let c = 0; c < itemShop.length; c++) {
+    totalCPS += itemShop[c].lvl * itemShop[c].rate;
   }
 
-  if (multiplier == 1){
+  if (multiplier == 1) {
     CPS.innerHTML = `${totalCPS} Ashes Per Second`;
-  } else {CPS.innerHTML = `${totalCPS}(X ${multiplier}) Ashes Per Second`; }
-  
+  } else {
+    CPS.innerHTML = `${totalCPS}(X ${multiplier}) Ashes Per Second`;
+  }
 
   for (let a = 0; a < listOfButtons.length; a++) {
     checkAvailable(a, listOfButtons[a]);
@@ -222,10 +219,3 @@ function globalUpdate(FR: number): void {
   requestAnimationFrame(globalUpdate);
 }
 requestAnimationFrame(globalUpdate);
-
-
-
-
-
-
-//SAIYAN LIMIT = "DNE"
