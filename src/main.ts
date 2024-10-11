@@ -21,7 +21,6 @@ theGameButton.style.fontSize = "140px";
 theGameButton.style.background = "green";
 theGameButton.style.border = "black";
 
-
 let clicks = 0;
 let clickIncrease = 0;
 theGameButton.onclick = () => {
@@ -32,61 +31,99 @@ app.append(theGameButton);
 
 //AUTOCLICK UPGRADE LEVELS
 
-//FIREPIT//
-
 const upgradeLevels = [0, 0, 0];
-const upgradeCosts = [10, 100, 1000];
 
-const firepit = document.createElement("button");
-firepit.innerHTML = `Get Firepit For: (${upgradeCosts[0] | 0}) Ashes`;
-
-firepit.onclick = () => {
-  clickIncrease += 0.1;
-  clicks -= 10;
-  upgradeLevels[0]++;
-  upgradeCosts[0] *= 1.15;
-  firepit.innerHTML = `(${upgradeCosts[0] | 0}) | (${upgradeLevels[0]}) Firepit`;
-  console.log(upgradeCosts);
+interface Item {
+  name: string,
+  cost: number,
+  rate: number,
+  left: string,
+  top: string,
+  hoverLeft: string,
+  hoverTop: string,
+  desc: string
 };
 
-firepit.style.position = "absolute";
-firepit.style.left = "20px";
-firepit.style.top = "50px";
-app.append(firepit);
+const itemShop : Item[] = [
 
-//CHARCOAL//
-const charcoal = document.createElement("button");
-charcoal.innerHTML = `Get Charcoal For: (${upgradeCosts[1] | 0}) Ashes`;
+  {name: "FirePit", 
+  cost: 10, rate: 0.1, 
+  left: "20px", 
+  top: "50px",
+  hoverLeft: "290px", 
+  hoverTop: "32px",
+  desc: "A cozy firepit, great for some camping.<br>Gain an additional 0.1 Ashes Per Second."
+  },
+  {name: "Charcoal", 
+  cost: 100, 
+  rate: 2, 
+  left: "20px", 
+  top: "100px",
+  hoverLeft: "300px", 
+  hoverTop: "80px",
+  desc: "Quality Charcoal to fuel the fire.<br>Gain an additional 2 Ashes Per Second."
+},
+  {name: "Lighter Fluid", 
+  cost: 1000, 
+  rate: 50, 
+  left: "20px", 
+  top: "150px",
+  hoverLeft: "335px", 
+  hoverTop: "130px",
+  desc: "Please dont set things on fire that shouldn't...<br>Gain an additional 50 Ashes Per Second."
+}
 
-charcoal.onclick = () => {
-  clickIncrease += 2;
-  clicks -= 100;
-  upgradeLevels[1]++;
-  upgradeCosts[1] *= 1.15;
-  charcoal.innerHTML = `(${upgradeCosts[1] | 0}) Ashes | (${upgradeLevels[1]}) Charcoal`;
-};
+];
 
-charcoal.style.position = "absolute";
-charcoal.style.left = "20px";
-charcoal.style.top = "100px";
-app.append(charcoal);
 
-//LIGHTER_FLUID/
-const lighterFluid = document.createElement("button");
-lighterFluid.innerHTML = `Get Lighter Fluid For: (${upgradeCosts[2] | 0}) Ashes`;
+//!!!CREATING BUTTONS VIA DDD!!!//
+let listOfButtons: HTMLButtonElement[] = [];
+for (let a = 0; a <= 2; a++){
+  let button = document.createElement("button");
+  if (upgradeLevels[a] == 0) {
+    if (a == 2 || a == 1) {
+      button.innerHTML = `Get ${itemShop[a].name} For: ${itemShop[a].cost | 0}  Ashes `;
+    } else {button.innerHTML = `Get a ${itemShop[a].name} For: ${itemShop[a].cost | 0}  Ashes `;}
+  }
 
-lighterFluid.onclick = () => {
-  clickIncrease += 50;
-  clicks -= 1000;
-  upgradeLevels[2]++;
-  upgradeCosts[2] *= 1.15;
-  lighterFluid.innerHTML = `(${upgradeCosts[2] | 0}) | (${upgradeLevels[2]}) Cans of Lighter Fluid`;
-};
+  button.onclick = () => {
+    clickIncrease += itemShop[a].rate;
+    clicks -= itemShop[a].cost;
+    upgradeLevels[a]++;
+    itemShop[a].cost *= 1.15;
+    button.innerHTML = `${itemShop[a].cost | 0} | ${upgradeLevels[a]} ${itemShop[a].name}`;
+  };
 
-lighterFluid.style.position = "absolute";
-lighterFluid.style.left = "20px";
-lighterFluid.style.top = "150px";
-app.append(lighterFluid);
+  button.style.position = "absolute";
+  button.style.left = itemShop[a].left;
+  button.style.top = itemShop[a].top;
+  document.body.appendChild(button);
+  listOfButtons.push(button);
+
+
+  //HOVER SHOWS BONUS DETAILS
+  button.addEventListener("mouseenter", function () {
+    let bonusText = document.createElement("p");
+    bonusText.style.left = itemShop[a].hoverLeft;
+    bonusText.style.top = itemShop[a].hoverTop;
+    bonusText.innerHTML = itemShop[a].desc;
+    bonusText.style.position = "absolute";
+    app.append(bonusText);
+    button.addEventListener("mouseleave", function () {
+      bonusText.innerHTML = ""; //DISSAPEAR WHEN NO LONGER HOVERING
+      bonusText.style.left = "30000px";
+    });
+  });
+
+  if (clicks < itemShop[a].cost) {
+    button.disabled = true;
+  } else {
+    button.disabled = false;
+  }
+
+}
+
+
 
 //DISPLAY CLICKS 🗣️🗣️🗣️🔥🔥🔥
 const displayClicks = document.createElement("p");
@@ -97,7 +134,7 @@ displayClicks.style.top = "50px";
 displayClicks.style.fontSize = "40px";
 app.append(displayClicks);
 
-//CPS
+//Clicks Per Second
 const CPS = document.createElement("p");
 CPS.style.position = "absolute";
 CPS.innerHTML = "im shocked if you manage to see this in-game";
@@ -106,55 +143,17 @@ CPS.style.top = "130px";
 CPS.style.fontSize = "15px";
 app.append(CPS);
 
-//SHOW BONUSTEXT
-const bonusDescrip = [
-  "A cozy firepit, great for some camping.<br>Gain an additional 0.1 Ashes Per Second.", 
-  "Quality Charcoal to fuel the fire.<br>Gain an additional 2 Ashes Per Second.", //UPGRADE DESCRIPTIONS
-  "Please dont set things on fire that shouldn't...<br>Gain an additional 50 Ashes Per Second." 
+//IF AUTOCLICK UPGRADE IS AVAILABLE
+  //HELPER FUNCTION
 
-];
-const bonusText = document.createElement("p");
-bonusText.style.position = "absolute";
-bonusText.innerHTML = "TEST";
-bonusText.style.left = "30000px";
-bonusText.style.fontSize = "14px";
-app.append(bonusText); //CREATING THE BONUS TEXT
-
-//SHOW TEXT UPON HOVER
-firepit.addEventListener("mouseenter", function(){
-  bonusText.style.left = "270px";
-  bonusText.style.top = "35px";
-  bonusText.innerHTML = bonusDescrip[0];
-  firepit.addEventListener("mouseleave", function(){
-    bonusText.innerHTML = "";   //DISSAPEAR WHEN NO LONGER HOVERING
-    bonusText.style.left = "30000px";
-  });
-});
-
-
-charcoal.addEventListener("mouseenter", function(){
-  bonusText.style.left = "290px";
-  bonusText.style.top = "86px";
-  bonusText.innerHTML = bonusDescrip[1];
-  charcoal.addEventListener("mouseleave", function(){
-    bonusText.innerHTML = "";
-    bonusText.style.left = "30000px";
-  });
-});
-
-
-lighterFluid.addEventListener("mouseenter", function(){
-  bonusText.style.left = "333px";
-  bonusText.style.top = "137px";
-  bonusText.innerHTML = bonusDescrip[2];
-  lighterFluid.addEventListener("mouseleave", function(){
-    bonusText.innerHTML = "";
-    bonusText.style.left = "30000px";
-  });
-});
-
-
-
+  function checkAvailable(a: number, button: HTMLButtonElement){
+    if (clicks < itemShop[a].cost) {
+      button.disabled = true;
+    } else {
+      button.disabled = false;
+    }
+  }
+  
 //GLOBAL UPDATE
 let lastTick = 0;
 let amount = clickIncrease;
@@ -166,27 +165,12 @@ function globalUpdate(FR: number): void {
   clicks = clicks + amount;
 
   displayClicks.innerHTML = `(${clicks | 0}) Ashes`;
-  CPS.innerHTML = `(${0.1 * upgradeLevels[0] + 2 * upgradeLevels[1] + 50 * upgradeLevels[2]}) Ashes / Second`;
+  CPS.innerHTML = `(${0.1 * upgradeLevels[0] + 2 * upgradeLevels[1] + 50 * upgradeLevels[2]}) Ashes Per Second`;
 
-  //IF AUTOCLICK UPGRADE
-  //IS AVAILABLE
-  if (clicks < upgradeCosts[0]) {
-    firepit.disabled = true;
-  } else {
-    firepit.disabled = false;
+  for (let a = 0; a < listOfButtons.length; a++){
+    checkAvailable(a, listOfButtons[a]);
   }
-
-  if (clicks < upgradeCosts[1]) {
-    charcoal.disabled = true;
-  } else {
-    charcoal.disabled = false;
-  }
-
-  if (clicks < upgradeCosts[2]) {
-    lighterFluid.disabled = true;
-  } else {
-    lighterFluid.disabled = false;
-  }
+  
 
   requestAnimationFrame(globalUpdate);
 }
