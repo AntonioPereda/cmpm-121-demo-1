@@ -2,4 +2,7 @@ This is the starter code project for the `Demo 1` project in CMPM 121, Game Desi
 
 ####CHANGELOG####
 
-- The dev forgot to remove features only intended for testing/debugging purposes. They have now been removed.
+- Removed a few console.log s
+- Changed the names of a few variables for further clarity
+- Edited (a few) conditions to be more clear on what the conidtions actually are/looking for
+- Added a few helper functions

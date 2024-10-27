@@ -10,6 +10,37 @@ const header = document.createElement("h1");
 header.innerHTML = gameName;
 app.append(header);
 
+//GLOBAL UPDATE
+let lastTick = 0;
+let amount = clickIncrease;
+function globalUpdate(frameRate: number): void {
+  const deltaFrameRate = (frameRate - lastTick) / 1000; //FRAMERATE CALC
+  lastTick = frameRate;
+
+  amount = clickIncrease * multiplier * deltaFrameRate; //AUTOCLICK FUNCT
+  clicks = clicks + amount;
+
+  displayClicks.innerHTML = `(${clicks | 0}) Ashes`;
+
+  let totalclicksPerSecond = 0;
+
+  for (let c = 0; c < itemShop.length; c++) {
+    totalclicksPerSecond += itemShop[c].lvl * itemShop[c].rate;
+  }
+
+  if (isMultiplierDefault()) {
+    clicksPerSecond.innerHTML = `${totalclicksPerSecond} Ashes Per Second`;
+  } else {
+    clicksPerSecond.innerHTML = `${totalclicksPerSecond}(X ${multiplier}) Ashes Per Second`;
+  }
+
+  for (let a = 0; a < listOfButtons.length; a++) {
+    checkAvailable(a, listOfButtons[a]);
+  }
+
+  requestAnimationFrame(globalUpdate);
+}
+
 //MAIN BUTTON TO CLICK
 const theGameButton = document.createElement("button");
 theGameButton.innerHTML = "🔥";
@@ -107,43 +138,45 @@ const itemShop: Item[] = [
   },
 ];
 
+
+function getItemLvl(id:number):number{
+  return itemShop[id].lvl;
+}
 //!!!CREATING BUTTONS VIA DDD!!!//
 const listOfButtons: HTMLButtonElement[] = [];
-for (let a = 0; a <= itemShop.length - 1; a++) {
-  console.log(a);
+for (let id = 0; id <= itemShop.length - 1; id++) {
   const button = document.createElement("button");
-  if (itemShop[a].lvl == 0) {
-    if (a == 2 || a == 1) {
-      button.innerHTML = `Get ${itemShop[a].name} For: ${itemShop[a].cost | 0}  Ashes`;
-    } else if (a == 4) {
-      button.innerHTML = `Hold ${itemShop[a].name} Hostage For: ${itemShop[a].cost | 0}  Ashes`;
+  if (getItemLvl(id) == 0) {
+    if (id == 2 || id == 1) {
+      button.innerHTML = `Get ${itemShop[id].name} For: ${itemShop[id].cost | 0}  Ashes`;
+    } else if (id == 4) {
+      button.innerHTML = `Hold ${itemShop[id].name} Hostage For: ${itemShop[id].cost | 0}  Ashes`;
     } else {
-      console.log(itemShop[a].name);
-      button.innerHTML = `Get a ${itemShop[a].name} For: ${itemShop[a].cost | 0}  Ashes`;
+      button.innerHTML = `Get a ${itemShop[id].name} For: ${itemShop[id].cost | 0}  Ashes`;
     }
   }
 
   button.onclick = () => {
-    clickIncrease += itemShop[a].rate;
-    multiplier += itemShop[a].multrate;
-    clicks -= itemShop[a].cost;
-    itemShop[a].lvl++;
-    itemShop[a].cost *= 1.15;
-    button.innerHTML = `${itemShop[a].cost | 0} | ${itemShop[a].lvl} ${itemShop[a].name}`;
+    clickIncrease += itemShop[id].rate;
+    multiplier += itemShop[id].multrate;
+    clicks -= itemShop[id].cost;
+    itemShop[id].lvl++;
+    itemShop[id].cost *= 1.15;
+    button.innerHTML = `${itemShop[id].cost | 0} | ${itemShop[id].lvl} ${itemShop[id].name}`;
   };
 
   button.style.position = "absolute";
-  button.style.left = itemShop[a].left;
-  button.style.top = itemShop[a].top;
+  button.style.left = itemShop[id].left;
+  button.style.top = itemShop[id].top;
   document.body.appendChild(button);
   listOfButtons.push(button);
 
   //HOVER SHOWS BONUS DETAILS
   button.addEventListener("mouseenter", function () {
     const bonusText = document.createElement("p");
-    bonusText.style.left = itemShop[a].hoverLeft;
-    bonusText.style.top = itemShop[a].hoverTop;
-    bonusText.innerHTML = itemShop[a].desc;
+    bonusText.style.left = itemShop[id].hoverLeft;
+    bonusText.style.top = itemShop[id].hoverTop;
+    bonusText.innerHTML = itemShop[id].desc;
     bonusText.style.position = "absolute";
     app.append(bonusText);
     button.addEventListener("mouseleave", function () {
@@ -152,7 +185,7 @@ for (let a = 0; a <= itemShop.length - 1; a++) {
     });
   });
 
-  if (clicks < itemShop[a].cost) {
+  if (clicks < itemShop[id].cost) {
     button.disabled = true;
   } else {
     button.disabled = false;
@@ -169,13 +202,13 @@ displayClicks.style.fontSize = "40px";
 app.append(displayClicks);
 
 //Clicks Per Second
-const CPS = document.createElement("p");
-CPS.style.position = "absolute";
-CPS.innerHTML = "im shocked if you manage to see this in-game";
-CPS.style.left = "975px";
-CPS.style.top = "130px";
-CPS.style.fontSize = "15px";
-app.append(CPS);
+const clicksPerSecond = document.createElement("p");
+clicksPerSecond.style.position = "absolute";
+clicksPerSecond.innerHTML = "im shocked if you manage to see this in-game";
+clicksPerSecond.style.left = "975px";
+clicksPerSecond.style.top = "130px";
+clicksPerSecond.style.fontSize = "15px";
+app.append(clicksPerSecond);
 
 //IF AUTOCLICK UPGRADE IS AVAILABLE
 //HELPER FUNCTION
@@ -188,34 +221,8 @@ function checkAvailable(a: number, button: HTMLButtonElement) {
   }
 }
 
-//GLOBAL UPDATE
-let lastTick = 0;
-let amount = clickIncrease;
-function globalUpdate(FR: number): void {
-  const dFR = (FR - lastTick) / 1000; //FRAMERATE CALC
-  lastTick = FR;
-
-  amount = clickIncrease * multiplier * dFR; //AUTOCLICK FUNCT
-  clicks = clicks + amount;
-
-  displayClicks.innerHTML = `(${clicks | 0}) Ashes`;
-
-  let totalCPS = 0;
-
-  for (let c = 0; c < itemShop.length; c++) {
-    totalCPS += itemShop[c].lvl * itemShop[c].rate;
-  }
-
-  if (multiplier == 1) {
-    CPS.innerHTML = `${totalCPS} Ashes Per Second`;
-  } else {
-    CPS.innerHTML = `${totalCPS}(X ${multiplier}) Ashes Per Second`;
-  }
-
-  for (let a = 0; a < listOfButtons.length; a++) {
-    checkAvailable(a, listOfButtons[a]);
-  }
-
-  requestAnimationFrame(globalUpdate);
+function isMultiplierDefault(): boolean {
+  return multiplier === 1;
 }
+
 requestAnimationFrame(globalUpdate);
