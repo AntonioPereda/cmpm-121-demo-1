@@ -8,38 +8,8 @@ document.title = gameName;
 
 const header = document.createElement("h1");
 header.innerHTML = gameName;
+header.style.fontFamily = "Copperplate, Fantasy";
 app.append(header);
-
-//GLOBAL UPDATE
-let lastTick = 0;
-let amount = clickIncrease;
-function globalUpdate(frameRate: number): void {
-  const deltaFrameRate = (frameRate - lastTick) / 1000; //FRAMERATE CALC
-  lastTick = frameRate;
-
-  amount = clickIncrease * multiplier * deltaFrameRate; //AUTOCLICK FUNCT
-  clicks = clicks + amount;
-
-  displayClicks.innerHTML = `(${clicks | 0}) Ashes`;
-
-  let totalclicksPerSecond = 0;
-
-  for (let c = 0; c < itemShop.length; c++) {
-    totalclicksPerSecond += itemShop[c].lvl * itemShop[c].rate;
-  }
-
-  if (isMultiplierDefault()) {
-    clicksPerSecond.innerHTML = `${totalclicksPerSecond} Ashes Per Second`;
-  } else {
-    clicksPerSecond.innerHTML = `${totalclicksPerSecond}(X ${multiplier}) Ashes Per Second`;
-  }
-
-  for (let a = 0; a < listOfButtons.length; a++) {
-    checkAvailable(a, listOfButtons[a]);
-  }
-
-  requestAnimationFrame(globalUpdate);
-}
 
 //MAIN BUTTON TO CLICK
 const theGameButton = document.createElement("button");
@@ -52,7 +22,7 @@ theGameButton.style.fontSize = "140px";
 theGameButton.style.background = "green";
 theGameButton.style.border = "black";
 
-let clicks = 0;
+let clicks = 500;
 let clickIncrease = 0;
 let multiplier = 1;
 theGameButton.onclick = () => {
@@ -60,6 +30,27 @@ theGameButton.onclick = () => {
   clicks++;
 };
 app.append(theGameButton);
+
+
+function shakeButton(button: HTMLElement) {
+  let shakeCount = 0;
+
+  const shakeInterval = setInterval(() => {
+      if (shakeCount < 10) { // shake 10 times
+          const offset = shakeCount % 2 === 0 ? 5 : -5; // alternate left and right
+          button.style.transform = `translateX(${offset}px)`;
+          shakeCount++;
+      } else {
+          clearInterval(shakeInterval);
+          button.style.transform = 'translateX(0px)'; // reset position
+      }
+  }, 50); // adjust speed as needed
+}
+
+theGameButton.addEventListener('click', () => {
+  shakeButton(theGameButton as HTMLElement);
+});
+
 
 //MAKING ITEMSHOP
 interface Item {
@@ -138,8 +129,7 @@ const itemShop: Item[] = [
   },
 ];
 
-
-function getItemLvl(id:number):number{
+function getItemLvl(id: number): number {
   return itemShop[id].lvl;
 }
 //!!!CREATING BUTTONS VIA DDD!!!//
@@ -177,6 +167,7 @@ for (let id = 0; id <= itemShop.length - 1; id++) {
     bonusText.style.left = itemShop[id].hoverLeft;
     bonusText.style.top = itemShop[id].hoverTop;
     bonusText.innerHTML = itemShop[id].desc;
+    bonusText.style.fontFamily = "Courier New, Monospace";
     bonusText.style.position = "absolute";
     app.append(bonusText);
     button.addEventListener("mouseleave", function () {
@@ -223,6 +214,55 @@ function checkAvailable(a: number, button: HTMLButtonElement) {
 
 function isMultiplierDefault(): boolean {
   return multiplier === 1;
+}
+
+//GLOBAL HELPERS
+let lastTick = 0;
+let amount = clickIncrease;
+function checkButtons(): void {
+  listOfButtons.forEach((button, index) => {
+    checkAvailable(index, button);
+  });
+}
+function calculateFrames(FR: number): number {
+  const dFR = (FR - lastTick) / 1000;
+  lastTick = FR;
+  return dFR;
+}
+function updateClicks(dFR: number): void {
+  amount = clickIncrease * multiplier * dFR;
+  clicks += amount;
+}
+
+//GLOBAL UPDATE
+let shakeTrack = 0;
+function globalUpdate(frameRate: number): void {
+  const deltaFrameRate = calculateFrames(frameRate);
+  updateClicks(deltaFrameRate);
+
+
+  displayClicks.innerHTML = `(${clicks | 0}) Ashes`;
+
+  let totalclicksPerSecond = 0;
+  shakeTrack+= (clickIncrease * multiplier * deltaFrameRate);
+  if (shakeTrack > 10){
+    shakeButton(theGameButton as HTMLElement);
+    shakeTrack = 0;
+  }
+
+  for (let c = 0; c < itemShop.length; c++) {
+    totalclicksPerSecond += itemShop[c].lvl * itemShop[c].rate;
+  }
+
+  if (isMultiplierDefault()) {
+    clicksPerSecond.innerHTML = `${totalclicksPerSecond} Ashes Per Second`;
+  } else {
+    clicksPerSecond.innerHTML = `${totalclicksPerSecond}(X ${multiplier}) Ashes Per Second`;
+  }
+
+  checkButtons();
+
+  requestAnimationFrame(globalUpdate);
 }
 
 requestAnimationFrame(globalUpdate);

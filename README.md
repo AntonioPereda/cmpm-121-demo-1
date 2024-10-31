@@ -2,7 +2,13 @@ This is the starter code project for the `Demo 1` project in CMPM 121, Game Desi
 
 ####CHANGELOG####
 
-- Removed a few console.log s
-- Changed the names of a few variables for further clarity
-- Edited (a few) conditions to be more clear on what the conidtions actually are/looking for
-- Added a few helper functions
+- CHANGE A INSPIRATION: https://cheristic.github.io/cmpm-121-demo-1/
+    - Changed font of a few select text to stand out
+        - Changed font of title text font
+        - Changed font of bonus text
+
+- CHANGE B INSPIRATION: https://rozy-dixon.github.io/cmpm-121-demo-1/
+    - Added a click animation whenever theGameButton is clicked
+        - This animation also autoplays whenever you gain a certain amount of autoclicks (not the rate itself, but the number of autoclicks that get added to your total clicks)
+
+
