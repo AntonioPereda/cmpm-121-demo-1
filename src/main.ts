@@ -22,7 +22,7 @@ theGameButton.style.fontSize = "140px";
 theGameButton.style.background = "green";
 theGameButton.style.border = "black";
 
-let clicks = 500;
+let clicks = 0;
 let clickIncrease = 0;
 let multiplier = 1;
 theGameButton.onclick = () => {
